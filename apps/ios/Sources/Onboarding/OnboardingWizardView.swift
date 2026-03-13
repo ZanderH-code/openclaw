@@ -60,7 +60,7 @@ struct OnboardingWizardView: View {
     @State private var gatewayToken: String = ""
     @State private var gatewayPassword: String = ""
     @State private var connectMessage: String?
-    @State private var statusLine: String = "Scan a QR code or set up your gateway manually."
+    @State private var statusLine: String = "In your OpenClaw chat, run /pair qr, then scan the code here."
     @State private var connectingGatewayID: String?
     @State private var issue: GatewayConnectionIssue = .none
     @State private var didMarkCompleted = false
@@ -401,6 +401,27 @@ struct OnboardingWizardView: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text("How to pair")
+                    .font(.headline)
+                Text("In your OpenClaw chat, run")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                Text("/pair qr")
+                    .font(.system(.footnote, design: .monospaced).weight(.semibold))
+                Text("Then scan the QR code here to connect this iPhone.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(16)
+            .background {
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(Color(uiColor: .secondarySystemBackground))
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 20)
 
             Spacer()
 
@@ -818,7 +839,7 @@ struct OnboardingWizardView: View {
 
     private func advanceFromIntro() {
         OnboardingStateStore.markFirstRunIntroSeen()
-        self.statusLine = "Scan a QR code or set up your gateway manually."
+        self.statusLine = "In your OpenClaw chat, run /pair qr, then scan the code here."
         self.step = .welcome
     }
 
@@ -871,7 +892,7 @@ struct OnboardingWizardView: View {
         let hasToken = !self.gatewayToken.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         let hasPassword = !self.gatewayPassword.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         if !hasSavedGateway, !hasToken, !hasPassword {
-            self.statusLine = "No saved pairing found. Scan QR code to connect."
+            self.statusLine = "No saved pairing found. In your OpenClaw chat, run /pair qr, then scan the code here."
         }
     }
 
